@@ -1,0 +1,35 @@
+<template>
+  <el-carousel class="swiper-container" :interval="4000" type="card" height="15vw">
+    <el-carousel-item v-for="(item,index) in scrollTop" :key="index">
+      <el-image fit="cover" :src="item.value"/>
+    </el-carousel-item>
+  </el-carousel>
+</template>
+
+<script lang="ts" >
+import {defineComponent} from "vue";
+import {scrollTop} from "@/enums/scrollTop";
+
+export default defineComponent({
+
+  setup(){
+
+    return{
+      scrollTop
+    }
+  }
+
+
+})
+</script>
+
+<style scoped>
+.swiper-container{
+  width: 100%;
+  margin: auto;
+  padding-top: 10px;
+}
+.el-image{
+  width: 100%;
+}
+</style>

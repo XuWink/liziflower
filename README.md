@@ -22,3 +22,11 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+> 安装router: 
+> npm install vue-router@4
+> 
+
+1.npm install -g typescript  安装ts
+
+npm install axios
