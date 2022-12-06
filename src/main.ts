@@ -1,9 +1,8 @@
 import { createApp } from "vue";
 import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
+import zhCn from "element-plus/es/locale/lang/zh-cn";
 import router from "./router";
-import Vuex from "vuex";
-import axios from "axios";
 import * as ElementPlusIconsVue from "@element-plus/icons-vue";
 import store from "./store/user";
 import { Store } from "vuex";
@@ -24,18 +23,6 @@ declare module "@vue/runtime-core" {
   }
 }
 
-//导航守卫
-router.beforeEach((to,from,next)=>{
-  let userid = sessionStorage.userid;
-  if (to.meta.needLogin){//需要登录的路由
-    if (userid){
-      next();
-    }else {
-      next({path: '/'})
-    }
-  }else {
-    next();
-  }
-})
 
-app.use(store).use(router).use(ElementPlus).mount("#app");
+
+app.use(store).use(router).use(ElementPlus, { locale: zhCn }).mount("#app");

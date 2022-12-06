@@ -30,3 +30,5 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 1.npm install -g typescript  安装ts
 
 npm install axios
+
+添加了导航守卫，

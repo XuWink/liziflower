@@ -3,12 +3,8 @@
   <div class="detail">
     <li-zi-scroll-top></li-zi-scroll-top>
   </div>
-<!--  <div class="notice">-->
-<!--    <my-editor/>-->
-<!--  </div>-->
-
   <div class="list">
-      <flower-list class="flower-container"></flower-list>
+    <flower-list class="flower-container"></flower-list>
   </div>
 </template>
 
@@ -35,10 +31,12 @@ export default defineComponent({
   margin: 0 auto;
   overflow: hidden;
 }
-.notice{
+
+.notice {
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
 .list {
   width: 90%;
   margin: 0 auto;

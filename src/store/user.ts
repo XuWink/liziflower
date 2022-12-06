@@ -99,29 +99,6 @@ export default new Vuex.Store({
             console.log(err);
           })
     }
-
-    // async flowerCategory(context, value) {
-    //   await request
-    //     .get(apiList.type + value.name)
-    //     .then(res => {
-    //       if (res.data.code === "200") {
-    //         console.log(res.data.data)
-    //         context.commit("SETFLOWERTYPE", res.data.data);
-    //         router.push({
-    //           path: "/flower-category",
-    //           query: { cateName: value.name },
-    //         });
-    //       } else {
-    //         ElMessage.error("获取异常");
-    //       }
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //     });
-    // },
-
-
-
   },
   modules: {},
 });

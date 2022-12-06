@@ -1,8 +1,11 @@
 <template>
-  <el-container class="c">
-    <el-header style="position: static" class="detail">
-      <li-zi-header></li-zi-header>
-    </el-header>
+  <el-container>
+    <div>
+      <el-affix :offset="0">
+        <li-zi-header></li-zi-header>
+      </el-affix>
+    </div>
+
     <el-main class="main">
       <router-view :key="$route.fullPath"/>
     </el-main>
@@ -10,6 +13,8 @@
       <li-zi-footer></li-zi-footer>
     </el-footer>
   </el-container>
+
+  <el-backtop :right="100" :bottom="100"/>
 
 </template>
 
@@ -32,16 +37,19 @@ export default defineComponent({
 <style scoped>
 .el-container {
   width: 100%;
+  /*margin: 0 auto;*/
+  overflow: hidden;
 }
 
-.detail ::v-deep {
+/*.detail ::v-deep {*/
+/*  width: 90%;*/
+/*  margin: 0 auto;*/
+/*  text-align: center;*/
+/*}*/
+.main {
   width: 90%;
   margin: 0 auto;
-  text-align: center;
 }
-.main{
-  width: 100%;
-  margin: 0 auto;
-}
+
 
 </style>

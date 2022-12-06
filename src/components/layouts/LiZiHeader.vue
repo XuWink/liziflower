@@ -1,15 +1,18 @@
 <template>
-  <el-menu class="el-menu-demo" mode="horizontal" router="false">
+  <el-menu
+      class="el-menu-demo"
+      mode="horizontal"
+      router="false"
+  >
     <el-menu-item index="/">
+      <li-zi-icon></li-zi-icon>
+    </el-menu-item>
+    <el-menu-item style="min-width: 200px" index="/">
       <el-icon>
         <HomeFilled/>
       </el-icon>
       HoMe
     </el-menu-item>
-    <!--    <el-menu-item index="/flower-category">-->
-    <!--      分类-->
-    <!--    </el-menu-item>-->
-
     <el-sub-menu style="right: 15px" index="1">
       <template #title> 分类</template>
       <el-menu-item
@@ -37,7 +40,7 @@
       花艺花语
     </el-menu-item>
 
-    <el-menu-item index="/shopping-cart">
+    <el-menu-item v-if="store.state.userid" index="/shopping-cart">
       <el-icon>
         <ShoppingCartFull/>
       </el-icon>
@@ -46,7 +49,7 @@
 
     <el-sub-menu style="right: 15px" v-if="store.state.userid" index="2">
       <template #title>
-        <el-avatar shape="square" :size="35" :fit="fit" :src="url"/>
+        <el-avatar v-if="store.state.avator" shape="square" :size="35" :fit="fit" :src="url"/>
       </template>
       <el-menu-item index="/personal">
         <el-icon>
@@ -54,18 +57,29 @@
         </el-icon>
         个人信息
       </el-menu-item>
+
+
+      <el-menu-item index="/money">
+        <el-icon>
+          <Money/>
+        </el-icon>
+        余额管理
+      </el-menu-item>
+
       <el-menu-item @click="goToPage('/paid-orders',10)" index="/paid-orders">
         <el-icon>
           <Histogram/>
         </el-icon>
         我的订单
       </el-menu-item>
-      <el-menu-item index="/password">
-        <el-icon>
-          <Edit/>
-        </el-icon>
-        修改信息
-      </el-menu-item>
+
+
+<!--      <el-menu-item index="/password">-->
+<!--        <el-icon>-->
+<!--          <Edit/>-->
+<!--        </el-icon>-->
+<!--        修改信息-->
+<!--      </el-menu-item>-->
       <el-menu-item index="/address">
         <el-icon>
           <Location/>
@@ -123,8 +137,8 @@ export default defineComponent({
 
     //退出登录
     const handleLogout = () => {
+      router.replace('home');
       window.sessionStorage.clear()//清空缓存
-      router.push('/');
       window.location.reload();
     };
 
@@ -153,6 +167,21 @@ export default defineComponent({
 <style scoped>
 .cate {
   width: 5rem !important;
+}
+
+.el-menu-demo ::v-deep {
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  /*margin: 0 auto;*/
+  border-bottom: 0.5px solid wheat;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.el-menu-item ::v-deep {
+  /*width: 10%;*/
 }
 
 </style>

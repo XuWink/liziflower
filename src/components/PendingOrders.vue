@@ -1,6 +1,8 @@
 <template>
-  <div>待收货的订单</div>
+  <div style="background-color: white;min-height: 80vh">
+
   <el-table
+      v-loading="loading"
       :table-layout="auto"
       :empty-text="没有数据"
       stripe
@@ -46,6 +48,8 @@
       </template>
     </el-table-column>
   </el-table>
+
+  </div>
   <el-dialog v-model="dialogTableVisible" title="订单详情">
     <el-table fit :data="gridData">
       <el-table-column align="center" prop="name" label="名称"/>
@@ -86,6 +90,7 @@ export default {
     const orderlist = ref([]);
     const dialogTableVisible = ref(false);
     const gridData = ref([]);
+    const loading = ref(true);
 
 
     const goItems = (orderid: number) => {//打开订单详情页
@@ -118,6 +123,7 @@ export default {
         if (res.data.code === '200') {
           ElNotification({
             title: '提示',
+            type: "success",
             message: "收货成功",
             position: 'top-left',
           });
@@ -141,10 +147,11 @@ export default {
         if (res.data.code === '200') {
           // console.log(res.data.data);
           res.data.data.forEach((item: any, index: any) => {
-            res.data.data[index].address = item.receiveaddress + item.receivecity + item.receivedistrict + item.receiveaddress;
+            res.data.data[index].address = item.receiceprovince + item.receivecity + item.receivedistrict + item.receiveaddress;
           });
           // console.log(res.data.data)
           orderlist.value = res.data.data;
+          loading.value = false;
         }
       }).catch(err => {
         console.log(err);
@@ -159,6 +166,7 @@ export default {
       getAllItems,
       gridData,
       handleMakeSure,
+      loading
     }
   }
 }

@@ -9,12 +9,13 @@
         :rules="rules"
         :model="ruleForm"
         label-width="80px"
+        size="large"
       >
         <el-form-item label="用户名">
           <el-input v-model="ruleForm.username" disabled></el-input>
         </el-form-item>
         <el-form-item label="年龄" prop="age">
-          <el-input v-model="ruleForm.age"></el-input>
+          <el-input class="elput" v-model="ruleForm.age"></el-input>
         </el-form-item>
         <el-form-item label="性别" prop="sex">
           <el-input v-model="ruleForm.sex"></el-input>
@@ -85,7 +86,6 @@ export default defineComponent({
         } else {
           ElMessage.error("输入错误");
           console.log(fields);
-          
         }
       });
     };
@@ -102,14 +102,21 @@ export default defineComponent({
 
 <style scoped>
 .detail {
-  width: 90%;
-  margin: 0 auto;
+  width: 100%;
+  /* margin: 0 auto; */
 }
 
-.card {
+.card ::v-deep {
+  background-color: rgba(255, 255, 255, 0.0);
+  border: none;
+  width: 100%;
+}
+.el-form ::v-deep {
   width: 100%;
 }
 
-.el-card ::v-deep {
+.elput ::v-deep .el-input__inner {
+  background-color: rgba(255, 255, 255, 0.2);
+  /* height: 120px; */
 }
 </style>

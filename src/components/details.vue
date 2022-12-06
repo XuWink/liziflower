@@ -1,151 +1,191 @@
 <template>
-  <div class="detail"
-       :style="{
-          boxShadow: `var(--el-box-shadow-light)`,
-        }">
+  <div style="background-color: white;padding: 45px 55px 20px 55px">
+
+  <div class="detail">
     <div class="detail-silde">
       <div>
-        <el-image :src="data.flowerimage"
-                  fit="cover"
-                  :preview-src-list="[data.flowerimage]"
-                  hide-on-click-modal="ture">
+        <el-image
+          :src="data.flowerimage"
+          fit="cover"
+          :preview-src-list="[data.flowerimage]"
+          hide-on-click-modal="ture"
+        >
         </el-image>
       </div>
-      <div style="margin-left: 35px;">
+      <div style="margin-left: 35px">
         <ul>
-          <li><span>名字：{{ data.name }}</span></li>
-          <li><span>描述：{{ data.describe }}</span></li>
-          <li style="height: 55px"><span>花语：{{ data.language }}</span></li>
-          <li><span>价格：{{ data.price }} ￥</span></li>
-          <li><span>库存：{{ data.stocknumber }} 件</span></li>
           <li>
-            <el-button @click="addCart(data)" type="primary"><span>加入购物车</span></el-button>
+            <span>名字：{{ data.name }}</span>
+          </li>
+          <li>
+            <span>描述：{{ data.describe }}</span>
+          </li>
+
+          <li style="height: 55px; overflow: hidden">
+            <el-tooltip
+              :content="data.language"
+              placement="bottom"
+              effect="light"
+            >
+              <span>花语：{{ data.language }}</span>
+            </el-tooltip>
+          </li>
+          <li>
+            <span>价格：{{ data.price }} ￥</span>
+          </li>
+          <li>
+            <span>库存：{{ data.stocknumber }} 件</span>
+          </li>
+          <li>
+            <el-button @click="addCart(data)" type="primary"
+              ><span>加入购物车</span></el-button
+            >
           </li>
         </ul>
       </div>
     </div>
   </div>
 
-  <div class="comment"
-       :style="{
-          boxShadow: `var(--el-box-shadow-lighter)`,
-        }">
-    <div style="margin-top: 20px;width:100%;height: 50px;justify-content: center;text-align: center;display: flex">
-      <el-tag style="width: 100%;height: 100%"><span style="font-size: 25px;color: orangered">用户评价</span></el-tag>
+  <div class="comment">
+    <div
+      style="
+        margin-top: 20px;
+        width: 100%;
+        height: 50px;
+        justify-content: center;
+        text-align: center;
+        display: flex;
+      "
+    >
+      <el-tag style="width: 100%; height: 100%"
+        ><span style="font-size: 20px; color: black">用户评价</span></el-tag
+      >
     </div>
-    <div style="width: 100%;">
-      <el-empty v-if="comments.length===0" description="暂无评价" :image-size="200"/>
-      <el-card v-for="( item , index ) in comments" :key="index" class="comment-card" shadow="false">
+    <div style="width: 100%">
+      <el-empty
+        v-if="comments.length === 0"
+
+        description="暂无评价"
+        :image-size="200"
+      />
+      <el-card
+        v-for="(item, index) in comments"
+        :key="index"
+        class="comment-card"
+        shadow="false"
+      >
         <template #header>
           <div style="display: flex">
             <div>
-              <el-avatar shape="square" :size="30" :src="lizilogo"/>
+              <el-avatar shape="square" :size="30" :src="lizilogo" />
             </div>
-            <span style="margin-left: 5px;line-height: 30px">
-              <span style="font-size: 20px">客户评价：</span>
-              <span v-text="item.remark"></span>
+            <span style="margin-left: 5px; line-height: 30px">
+              <span style="font-size: 18px">用户评价：</span>
+              <!-- <span v-text="item.remark"></span> -->
+              <p v-html="item.remark"></p>
             </span>
           </div>
         </template>
-        <span v-if="item.answer!==null"><span style="font-size: 20px;line-height: 30px">商家回复：</span>{{
-            item.answer
-          }}</span>
+        <span v-if="item.answer !== null"
+          ><span style="font-size: 20px; line-height: 30px">商家回复：</span>
+          <!-- {{item.answer}}</span> -->
+          <p v-html="item.answer"></p>
+        </span>
       </el-card>
-
-
     </div>
   </div>
 
+  </div>
 </template>
 
 <script setup>
-import {onMounted} from "@vue/runtime-core";
-import {useRoute} from "vue-router";
+import { onMounted } from "@vue/runtime-core";
+import { useRoute } from "vue-router";
 import request from "@/api/request.ts";
-import {apiList} from "@/enums/apiList.ts";
-import {ElMessage, ElNotification} from "element-plus";
-import {ref} from "vue";
-import lizilogo from "@/assets/lizilogo.png"
-import {add_Cart} from "@/mixins/mixins.ts";
-import {useStore} from "vuex";
+import { apiList } from "@/enums/apiList.ts";
+import { ElMessage, ElNotification } from "element-plus";
+import { ref } from "vue";
+import lizilogo from "@/assets/lizilogo.png";
+import { add_Cart } from "@/mixins/mixins.ts";
+import { useStore } from "vuex";
 
 onMounted(() => {
   getFlowerById();
-  getCommentByUserIdAndFlowerId();//获取评论
-})
+  getCommentByUserIdAndFlowerId(); //获取评论
+});
 const route = useRoute();
 const store = useStore();
 const data = ref({});
 const comments = ref({});
 const getFlowerById = async () => {
+  await request
+    .get(apiList.getFlowerDetail + route.query.flowerId)
+    .then((res) => {
+      if (res.data.code === "200") {
+        // console.log(res.data.data)
+        // ElMessage.success("获取成功")
+        data.value = res.data.data;
+      } else {
+        ElMessage.error("获取失败");
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 
-  await request.get(apiList.getFlowerDetail + route.query.flowerId)
-      .then(res => {
-        if (res.data.code === '200') {
-          // console.log(res.data.data)
-          // ElMessage.success("获取成功")
-          data.value = res.data.data;
-        } else {
-          ElMessage.error("获取失败")
-        }
-      }).catch(err => {
-        console.log(err)
-      })
-}
-
-const addCart = async (data) => {//添加购物车
-  console.log(data.flowerid)
+const addCart = async (data) => {
+  //添加购物车
+  console.log(data.flowerid);
   let sentData = {
     userid: store.state.userid,
-    flowerid: data.flowerid
-  }
+    flowerid: data.flowerid,
+  };
 
   let response = await add_Cart(sentData);
-  if (response.data.code === '200') {
+  if (response.data.code === "200") {
     ElNotification({
-      title: '添加',
-      message: name + '成功添加',
-      type: 'success'
-    })
+      title: "添加",
+      message: data.name + "成功添加",
+      type: "success",
+    });
   } else {
     ElNotification({
-      title: '添加',
-      message: name + '成功失败',
-      type: 'error'
-    })
+      title: "添加",
+      message: data.name + "添加失败",
+      type: "error",
+    });
   }
-
-
-}
+};
 
 const getCommentByUserIdAndFlowerId = async () => {
-  let flowerid = route.query.flowerId
+  let flowerid = route.query.flowerId;
 
-  await request.get(apiList.getComment + flowerid)
-      .then(res => {
-        if (res.data.code === '200') {
-          comments.value = res.data.data;
-          // ElMessage.success("成功")
-          // console.log(res.data.data)
-        } else {
-          ElMessage.error("获取评论失败")
-        }
-      }).catch(err => {
-        console.log(err);
-      })
-
-}
-
-
+  await request
+    .get(apiList.getComment + flowerid)
+    .then((res) => {
+      if (res.data.code === "200") {
+        comments.value = res.data.data;
+        // ElMessage.success("成功")
+        // console.log(res.data.data)
+      } else {
+        ElMessage.error("获取评论失败");
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 </script>
 
 <style scoped>
 .detail {
   display: flex;
   justify-content: center;
-  width: 60%;
+  width: 80%;
   margin: 0 auto;
   overflow: hidden;
+  background-color: white;
   /*border: 1px solid black;*/
 }
 
@@ -158,15 +198,16 @@ const getCommentByUserIdAndFlowerId = async () => {
   /*flex-direction: column;*/
   align-items: center;
   /*padding-top: 20px;*/
-  width: 100%;
+  width: 80%;
   height: 300px;
+  padding: 0 10px 0 0;
 }
 
 .comment {
   /*display: flex;*/
   flex: 1;
   /*justify-content: center;*/
-  width: 60%;
+  width: 80%;
   margin: 0 auto;
   /*border: 1px solid black;*/
 }
@@ -184,16 +225,16 @@ const getCommentByUserIdAndFlowerId = async () => {
   border-bottom: 5px solid rgb(200, 245, 245);
 }
 
-
 li {
   width: 100%;
   height: 45px;
   line-height: 30px;
 }
+.el-card ::v-deep {
+  background-color: rgba(255, 255, 255, 0.2);
+}
 
 .el-image {
   width: 300px;
 }
-
-
 </style>
